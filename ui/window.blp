@@ -1,0 +1,32 @@
+using Gtk 4.0;
+using Adw 1;
+
+template MainWindow : Adw.ApplicationWindow {
+  default-width: 600;
+  default-height: 300;
+  title: _("Hello, Blueprint!");
+
+  Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {
+      title-widget: Label {};
+    }
+
+    content: Box {
+      orientation: vertical;
+      valign: center;
+      halign: center;
+      spacing: 10;
+
+      Label label {
+        label: "Yay, blueprint is setup!";
+      }
+
+      Button button {
+        label: "Click Me!";
+        valign: center;
+        halign: center;
+      }
+    };
+  }
+}
