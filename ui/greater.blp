@@ -1,0 +1,42 @@
+using Gtk 4.0;
+using Adw 1;
+
+
+template $GreaterWindow : Adw.ApplicationWindow {
+
+    default-height: 400;
+    default-width: 600;
+    resizable: false;
+
+    Box  {
+        orientation: horizontal;
+        homogeneous: true;
+
+        Picture {
+            file: "resource:///org/gnome/Example/img/image.jpg";
+            content-fit: cover;
+            hexpand: false;
+            vexpand: false;
+        }
+        
+        Box {
+            orientation: vertical;
+            halign: center;
+            valign: center;
+            
+            Label label {
+            label: _("Welcome");
+            css-classes: ["title-1"];
+            }
+            
+            Button button {
+            label: _("Entrar");
+            halign: center;
+            margin-top: 10;
+            }
+        
+        }
+        
+    }
+
+}

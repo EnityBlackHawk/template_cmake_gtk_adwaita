@@ -2,5 +2,7 @@
 <gresources>
     <gresource prefix="/org/gnome/Example">
         <file>ui/window.ui</file>
+        <file>ui/greater.ui</file>
+        <file>img/image.jpg</file>
     </gresource>
 </gresources>

@@ -14,18 +14,66 @@ include_directories(${GTK_INCLUDE_DIRS} ${LIBADWAITA_INCLUDE_DIRS})
 link_directories(${GTK_LIBRARY_DIRS} ${LIBADWAITA_LIBRARY_DIRS})
 
 
-add_custom_command(
-        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/ui/window.ui
-        COMMAND blueprint-compiler batch-compile ${CMAKE_CURRENT_BINARY_DIR}/ui ${CMAKE_CURRENT_SOURCE_DIR}/ui/ ${CMAKE_CURRENT_SOURCE_DIR}/ui/window.blp
-        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/ui/window.blp
-)
+#####################################################################
+# Blueprint-compiler
 
-add_custom_target(compile_ui ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ui/window.ui)
+if(LOCAL_BLUEPRINT_COMPILER)
+
+        set(BLUEPRINT_COMPILER_EXECUTABLE blueprint-compiler)
+
+        add_custom_target(
+                BlueprintCompiler
+                COMMAND ${CMAKE_COMMAND} -E echo "Using local blueprint-compiler"
+        )
+
+else()
+
+        include(ExternalProject)
+        find_package(Python3 REQUIRED COMPONENTS Interpreter)
+
+        ExternalProject_Add(
+                BlueprintCompiler
+                GIT_REPOSITORY https://gitlab.gnome.org/jwestman/blueprint-compiler.git
+                GIT_TAG main
+                PREFIX ${CMAKE_BINARY_DIR}/blueprint-compiler
+                CONFIGURE_COMMAND ""
+                BUILD_COMMAND ""
+                INSTALL_COMMAND ""
+                LOG_DOWNLOAD ON
+        )
+
+        ExternalProject_Get_Property(BlueprintCompiler SOURCE_DIR)
+        set(BLUEPRINT_COMPILER_EXECUTABLE ${Python3_EXECUTABLE} ${SOURCE_DIR}/blueprint-compiler.py)
+endif()
+
+make_directory("${CMAKE_BINARY_DIR}/ui")
+file(GLOB_RECURSE BLP_FILES "${CMAKE_CURRENT_SOURCE_DIR}/ui/*.blp")
+foreach(BLP_FILE IN LISTS BLP_FILES)
+        
+        get_filename_component(FILE_NAME_WE ${BLP_FILE} NAME_WE)
+        set(UI_FILE ${CMAKE_BINARY_DIR}/ui/${FILE_NAME_WE}.ui)
+        list(APPEND UI_FILES ${UI_FILE})
+
+        add_custom_command(
+                OUTPUT ${UI_FILE}
+                COMMAND ${BLUEPRINT_COMPILER_EXECUTABLE} compile --output ${UI_FILE} ${BLP_FILE}
+                DEPENDS ${BLP_FILE} BlueprintCompiler
+                COMMENT "Compiling ${BLP_FILE} to ${UI_FILE}"
+        )
+
+endforeach()
+
+
+add_custom_target(compile_ui ALL DEPENDS ${UI_FILES})
+
+###########################################################
+# Compile resources
 
 find_program(GLIB_COMPILE_RESOURCES NAMES glib-compile-resources REQUIRED)
 
 set(GRESOURCE_C   resources.h)
 set(GRESOURCE_XML resources.gresource.xml)
+
 
 # Step 2:
 add_custom_command(
@@ -35,10 +83,12 @@ add_custom_command(
         ARGS
         --generate-source
         --target=${CMAKE_CURRENT_BINARY_DIR}/${GRESOURCE_C}
+        --sourcedir=${CMAKE_CURRENT_SOURCE_DIR}
+        --sourcedir=${CMAKE_CURRENT_BINARY_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/${GRESOURCE_XML}
         VERBATIM
         MAIN_DEPENDENCY ${GRESOURCE_XML}
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ui/window.ui
+        DEPENDS ${UI_FILES} compile_ui
 )
 
 # Step 3:
@@ -46,6 +96,7 @@ add_custom_target(
         resource
         DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${GRESOURCE_C}
 )
+add_dependencies(resource compile_ui)
 
 set_source_files_properties(
         ${CMAKE_CURRENT_BINARY_DIR}/${GRESOURCE_C}
@@ -57,7 +108,6 @@ include_directories(cmake_gtk "${CMAKE_CURRENT_SOURCE_DIR}/include" "${CMAKE_CUR
 FILE(GLOB_RECURSE SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
 
 add_executable(cmake_gtk "${SOURCE}")
-add_dependencies(cmake_gtk compile_ui)
 add_dependencies(cmake_gtk resource)
 
 #Link GTK and Libadwaita
