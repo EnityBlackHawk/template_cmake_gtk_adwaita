@@ -1,0 +1,35 @@
+id: org.ebh.Example
+runtime: org.gnome.Platform
+runtime-version: "47"
+sdk: org.gnome.Sdk
+command: cmake_gtk
+build-options:
+  build-args:
+    - --share=network
+finish-args:
+  - --share=network
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  - --filesystem=xdg-documents
+
+cleanup:
+  - "/include"
+  - "/lib/pkgconfig"
+  - "/man"
+  - "/share/doc"
+  - "/share/gtk-doc"
+  - "/share/man"
+  - "/share/pkgconfig"
+  - "*.la"
+  - "*.a"
+
+modules:
+  - name: cmake_gtk
+    buildsystem: cmake
+    builddir: true
+    sources:
+      - type: git
+        url: https://github.com/EnityBlackHawk/template_cmake_gtk_adwaita.git
+        branch: main

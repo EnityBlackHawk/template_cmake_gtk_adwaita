@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.30)
 project(cmake_gtk)
 
 set(CMAKE_CXX_STANDARD 20)
+set(NAMESPACE org.ebh.Example)
+set(ICON org.gnome.Example)
+set(EXECUTABLE ${CMAKE_PROJECT_NAME})
 
 find_package(PkgConfig REQUIRED)
 
@@ -115,3 +118,25 @@ target_link_libraries(cmake_gtk ${GTK_LIBRARIES} ${LIBADWAITA_LIBRARIES})
 
 # Compile definitions
 target_compile_options(cmake_gtk PRIVATE ${GTK4_CFLAGS_OTHER} ${LIBADWAITA_CFLAGS_OTHER})
+
+configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/service-files/application.desktop.in
+        ${CMAKE_CURRENT_BINARY_DIR}/service-files/${NAMESPACE}.desktop
+        @ONLY
+)
+
+configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/service-files/application.service.in
+        ${CMAKE_CURRENT_BINARY_DIR}/service-files/${NAMESPACE}.service
+        @ONLY
+)
+
+install(TARGETS cmake_gtk RUNTIME DESTINATION bin)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/service-files/${NAMESPACE}.desktop
+        DESTINATION share/applications
+)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/service-files/${NAMESPACE}.service
+        DESTINATION share/dbus-1/services
+)
+
+

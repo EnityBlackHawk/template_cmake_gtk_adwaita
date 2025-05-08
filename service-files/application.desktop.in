@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=cmake_gtk
+Exec=@EXECUTABLE@
+Icon=@ICON@
+Terminal=false
+Type=Application
+Categories=Utility;
+Keywords=GTK;
+StartupNotify=true
+DBusActivatable=true
