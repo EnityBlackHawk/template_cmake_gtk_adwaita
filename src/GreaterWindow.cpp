@@ -1,4 +1,5 @@
 #include "GreaterWindow.h"
+#include "NotificationManager.h"
 
 
 struct _GreaterWindow
@@ -12,6 +13,14 @@ struct _GreaterWindow
 };
 
 G_DEFINE_FINAL_TYPE(GreaterWindow, greater_window, ADW_TYPE_APPLICATION_WINDOW)
+
+
+static void on_button_clicked()
+{
+    // Exibe a notificação
+    NotificationManager::getInstance().showNotification("Hello", "This is a test notification");
+    g_print("Button clicked!\n");
+}
 
 
 
@@ -31,6 +40,8 @@ static void greater_window_init(GreaterWindow *self)
 {
     // Inicializa o template
     gtk_widget_init_template(GTK_WIDGET(self));
+
+    g_signal_connect(self->button, "clicked", on_button_clicked, NULL);
 }
 
 GreaterWindow* greater_window_new() {

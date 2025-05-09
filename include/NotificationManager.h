@@ -24,7 +24,7 @@ public:
     g_notification_set_body(notification, message.c_str());
     g_notification_set_priority(notification, G_NOTIFICATION_PRIORITY_NORMAL);
 
-    g_application_send_notification(_application, title.c_str(), notification);
+    g_application_send_notification(_application, "notification", notification);
 
     g_object_unref(notification);
   }

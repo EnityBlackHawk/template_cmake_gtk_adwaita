@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
     g_resources_register(resources_get_resource());
     g_set_application_name("My UI Adwaita App");
 
-    AdwApplication* app = adw_application_new("com.example.MyUIApp", G_APPLICATION_DEFAULT_FLAGS);
+    AdwApplication* app = adw_application_new("org.ebh.Example", G_APPLICATION_DEFAULT_FLAGS);
     NotificationManager::getInstance().setApplication( reinterpret_cast<GApplication*>(app));
     g_signal_connect(app, "activate", G_CALLBACK(on_activate), nullptr);
 
