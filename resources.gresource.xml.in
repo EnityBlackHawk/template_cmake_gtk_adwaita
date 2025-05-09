@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-    <gresource prefix="/org/gnome/Example">
+    <gresource prefix="@RESOURCE_BASE_PATH@">
         <file>ui/window.ui</file>
         <file>ui/greater.ui</file>
-        <file>img/image.jpg</file>
+        <file>img/image.png</file>
     </gresource>
 </gresources>

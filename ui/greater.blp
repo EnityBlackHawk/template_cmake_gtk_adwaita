@@ -13,10 +13,12 @@ template $GreaterWindow : Adw.ApplicationWindow {
         homogeneous: true;
 
         Picture {
-            file: "resource:///org/gnome/Example/img/image.jpg";
-            content-fit: cover;
+            file: "resource:///org/ebh/Example/img/image.png";
+            content-fit: contain;
             hexpand: false;
             vexpand: false;
+            halign: center;
+            valign: center;
         }
         
         Box {

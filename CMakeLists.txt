@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(NAMESPACE org.ebh.Example)
 set(ICON org.gnome.Example)
 set(EXECUTABLE ${CMAKE_PROJECT_NAME})
+set(RESOURCE_BASE_PATH /org/ebh/Example)
 
 find_package(PkgConfig REQUIRED)
 
@@ -78,6 +79,12 @@ find_program(GLIB_COMPILE_RESOURCES NAMES glib-compile-resources REQUIRED)
 set(GRESOURCE_C   resources.h)
 set(GRESOURCE_XML resources.gresource.xml)
 
+configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/${GRESOURCE_XML}.in
+        ${CMAKE_CURRENT_BINARY_DIR}/${GRESOURCE_XML}
+        @ONLY
+)
+
 
 # Step 2:
 add_custom_command(
@@ -89,9 +96,9 @@ add_custom_command(
         --target=${CMAKE_CURRENT_BINARY_DIR}/${GRESOURCE_C}
         --sourcedir=${CMAKE_CURRENT_SOURCE_DIR}
         --sourcedir=${CMAKE_CURRENT_BINARY_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/${GRESOURCE_XML}
+        ${CMAKE_CURRENT_BINARY_DIR}/${GRESOURCE_XML}
         VERBATIM
-        MAIN_DEPENDENCY ${GRESOURCE_XML}
+        MAIN_DEPENDENCY ${CMAKE_CURRENT_BINARY_DIR}/${GRESOURCE_XML}
         DEPENDS ${UI_FILES} compile_ui
 )
 

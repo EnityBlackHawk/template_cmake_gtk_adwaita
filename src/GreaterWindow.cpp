@@ -1,4 +1,7 @@
 #include "GreaterWindow.h"
+
+#include <config.h>
+
 #include "NotificationManager.h"
 
 
@@ -27,8 +30,8 @@ static void on_button_clicked()
 static void greater_window_class_init(GreaterWindowClass *klass)
 {
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
-
-    gtk_widget_class_set_template_from_resource(widget_class, "/org/gnome/Example/ui/greater.ui");
+    const char* resource_path = GET_RESOURCE("/ui/greater.ui");
+    gtk_widget_class_set_template_from_resource(widget_class, resource_path);
 
     //Pega os widgets do template
     gtk_widget_class_bind_template_child(widget_class, GreaterWindow, label);

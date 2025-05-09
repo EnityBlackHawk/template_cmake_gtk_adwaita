@@ -1,6 +1,4 @@
-#ifndef CONFIG_H_IN_H
-#define CONFIG_H_IN_H
+#pragma once
 
 #define NAMESPACE "@NAMESPACE@"
-
-#endif //CONFIG_H_IN_H
+#define GET_RESOURCE(param) "@RESOURCE_BASE_PATH@" "" param
