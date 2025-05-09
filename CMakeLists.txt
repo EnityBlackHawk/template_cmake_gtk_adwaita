@@ -49,7 +49,7 @@ else()
         set(BLUEPRINT_COMPILER_EXECUTABLE ${Python3_EXECUTABLE} ${SOURCE_DIR}/blueprint-compiler.py)
 endif()
 
-make_directory("${CMAKE_BINARY_DIR}/ui")
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/ui")
 file(GLOB_RECURSE BLP_FILES "${CMAKE_CURRENT_SOURCE_DIR}/ui/*.blp")
 foreach(BLP_FILE IN LISTS BLP_FILES)
         
@@ -66,7 +66,8 @@ foreach(BLP_FILE IN LISTS BLP_FILES)
 
 endforeach()
 
-
+file(GLOB_RECURSE NON_BLUEPRINT_FILES "${CMAKE_CURRENT_SOURCE_DIR}/ui/*.ui")
+file(COPY ${NON_BLUEPRINT_FILES} DESTINATION "${CMAKE_BINARY_DIR}/ui")
 add_custom_target(compile_ui ALL DEPENDS ${UI_FILES})
 
 ###########################################################
@@ -118,6 +119,11 @@ target_link_libraries(cmake_gtk ${GTK_LIBRARIES} ${LIBADWAITA_LIBRARIES})
 
 # Compile definitions
 target_compile_options(cmake_gtk PRIVATE ${GTK4_CFLAGS_OTHER} ${LIBADWAITA_CFLAGS_OTHER})
+
+configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/config.h
+)
 
 configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/service-files/application.desktop.in
