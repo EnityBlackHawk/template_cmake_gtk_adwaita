@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=cmake_gtk
+Name=@APPLICATION_NAME@
 Exec=@EXECUTABLE@
 Icon=@ICON@
 Terminal=false

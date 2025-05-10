@@ -6,6 +6,7 @@ set(NAMESPACE org.ebh.Example)
 set(ICON org.gnome.Example)
 set(EXECUTABLE ${CMAKE_PROJECT_NAME})
 set(RESOURCE_BASE_PATH /org/ebh/Example)
+set(APPLICATION_NAME "CMake Gtk")
 
 find_package(PkgConfig REQUIRED)
 
@@ -115,17 +116,17 @@ set_source_files_properties(
 )
 
 
-include_directories(cmake_gtk "${CMAKE_CURRENT_SOURCE_DIR}/include" "${CMAKE_CURRENT_BINARY_DIR}")
+include_directories(${CMAKE_PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/include" "${CMAKE_CURRENT_BINARY_DIR}")
 FILE(GLOB_RECURSE SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
 
-add_executable(cmake_gtk "${SOURCE}")
-add_dependencies(cmake_gtk resource)
+add_executable(${CMAKE_PROJECT_NAME} "${SOURCE}")
+add_dependencies(${CMAKE_PROJECT_NAME} resource)
 
 #Link GTK and Libadwaita
-target_link_libraries(cmake_gtk ${GTK_LIBRARIES} ${LIBADWAITA_LIBRARIES})
+target_link_libraries(${CMAKE_PROJECT_NAME} ${GTK_LIBRARIES} ${LIBADWAITA_LIBRARIES})
 
 # Compile definitions
-target_compile_options(cmake_gtk PRIVATE ${GTK4_CFLAGS_OTHER} ${LIBADWAITA_CFLAGS_OTHER})
+target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE ${GTK4_CFLAGS_OTHER} ${LIBADWAITA_CFLAGS_OTHER})
 
 configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
@@ -144,7 +145,7 @@ configure_file(
         @ONLY
 )
 
-install(TARGETS cmake_gtk RUNTIME DESTINATION bin)
+install(TARGETS ${CMAKE_PROJECT_NAME} RUNTIME DESTINATION bin)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/service-files/${NAMESPACE}.desktop
         DESTINATION share/applications
 )
