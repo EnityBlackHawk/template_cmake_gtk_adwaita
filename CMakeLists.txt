@@ -72,6 +72,7 @@ file(GLOB_RECURSE NON_BLUEPRINT_FILES "${CMAKE_CURRENT_SOURCE_DIR}/ui/*.ui")
 file(COPY ${NON_BLUEPRINT_FILES} DESTINATION "${CMAKE_BINARY_DIR}/ui")
 add_custom_target(compile_ui ALL DEPENDS ${UI_FILES})
 
+
 ###########################################################
 # Compile resources
 
@@ -153,4 +154,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/service-files/${NAMESPACE}.service
         DESTINATION share/dbus-1/services
 )
 
+install(FILES ${GSETTINGS_SCHEMA_DIR}/org.example.myapp.gschema.xml
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
 

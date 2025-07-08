@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schemalist>
+    <schema id="org.ebh.Example" path="/org/ebh/Example/">
+        <key name="message" type="s">
+            <summary>A hello message</summary>
+            <default>"Hello World"</default>
+        </key>
+    </schema>
+</schemalist>
